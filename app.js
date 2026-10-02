@@ -166,13 +166,17 @@ function initCounters() {
 function initFokiAnimation() {
   qsa('[data-foki-animated]').forEach(stack => {
     const imgs = qsa('img', stack);
-    if (imgs.length < 2) return;
-    let i = 0;
-    setInterval(() => {
-      imgs[i].classList.remove('is-active');
-      i = (i + 1) % imgs.length;
-      imgs[i].classList.add('is-active');
-    }, 1800);
+    imgs.forEach((img, idx) => img.classList.toggle('is-active', idx === 0));
+    const active = imgs[0];
+    if (!active) return;
+    const blink = () => {
+      active.animate([
+        { transform: 'scaleY(1)' },
+        { transform: 'scaleY(.965)' },
+        { transform: 'scaleY(1)' }
+      ], { duration: 180, easing: 'ease-in-out' });
+    };
+    setInterval(blink, 3600);
   });
 }
 
